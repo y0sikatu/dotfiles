@@ -1,0 +1,13 @@
+[user]
+	name = y0sikatu
+	email = y.iwasaki.y@gmail.com
+[color]
+	ui = auto
+[alias]
+	co = checkout
+	st = status
+	br = branch
+	fe = fetch --prune --tags
+	lg = log --decorate --graph
+	lgn = log --decorate --graph --name-status
+

@@ -1,0 +1,14 @@
+if [ -f ~/.git-completion.bash ]; then
+    source ~/.git-completion.bash
+fi
+
+if [ -f ~/.git-prompt.sh ]; then
+    source ~/.git-prompt.sh
+    RED="\[\e[1;31m\]"
+    GREEN="\[\e[1;32m\]"
+    BLUE="\[\e[1;34m\]"
+    DEFAULT="\[\e[m\]"
+#   PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+#   PS1="${GREEN}\u@\h:${BLUE}\w${RED}$(__git_ps1 " (%s)")${DEFAULT}\$ "
+    PS1='\[\e[1;32m\]\u@\h:\[\e[1;34m\]\w\[\e[1;31m\]$(__git_ps1 " (%s)")\[\e[m\]\$ '
+fi
