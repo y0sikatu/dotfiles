@@ -4,7 +4,10 @@
 
 ;;; Code:
 
-;; proxy
+;; 
+(add-to-list 'load-path (locate-user-emacs-file "conf"))
+
+;; Load proxy settings if exists.
 (load "proxy-conf" t)
 
 ;; Added by Package.el.  This must come before configurations of
@@ -13,19 +16,24 @@
 ;; You may delete these explanatory comments.
 (require 'package):
 ;; (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t) ;; melpa
-(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/") t) ;;melpa-stable
+(add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t) ;;melpa-stable
 (package-initialize)
-(package-refresh-contents)
-(defvar my/favorite-packages
+;; install if not installed
+(defvar installing-package-list
   '(
-    zenburn-theme
     company
     flycheck
+    helm
+    zenburn-theme
     ))
-;; my/favorite-packagesからインストールしていないパッケージをインストール
-(dolist (package my/favorite-packages)
-  (unless (package-installed-p package)
-    (package-install package)))
+(require 'cl) ;; for loop
+(let ((not-installed (loop for x in installing-package-list
+						   when (not (package-installed-p x))
+						   collect x)))
+  (when not-installed
+    (package-refresh-contents)
+    (dolist (pkg not-installed)
+      (package-install pkg))))
 
 ;; key bind
 (define-key minibuffer-local-filename-completion-map " " 'minibuffer-complete-word)
@@ -33,22 +41,20 @@
 
 ;; misc
 (setq-default transient-mark-mode t)
+(setq-default tab-width 4)
 (setq make-backup-files nil)
 (global-linum-mode)
 (column-number-mode t)
 (global-hl-line-mode t)
 (show-paren-mode t)
-(setq-default tab-width 4)
+(tool-bar-mode 0)
 
 ;; c++-mode
-(add-hook 'c++-mode
-	  (lambda()
-	    (c-set-style 'stroustrup)))
-
-;; zenburn-theme
-(defvar zenburn-override-colors-alist
-  '(("zenburn-bg" . "#111111")))
-(load-theme 'zenburn t)
+(add-hook 'c++-mode-hook
+		  '(lambda()
+			 (c-set-style "stroustrup")
+			 (c-set-offset 'innamespace 0)
+			 ))
 
 ;; company
 (require 'company)
@@ -84,26 +90,18 @@
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector
-   [default default default italic underline success warning error])
- '(current-language-environment "Japanese")
- '(custom-safe-themes
-   (quote
-    ("bfdcbf0d33f3376a956707e746d10f3ef2d8d9caa1c214361c9c08f00a1c8409" "21417b73cddd887276d91053082746f5fab3d8c933a705999595fce1ab1e4ded" "1373e3623ed5d758ef06dd19f2c8a736a69a15496c745a113d42230ab71d6b58" "799291799f87afb7a2a55bd63082c58fb58912bee0a6e3d5c1ce0e083ed046c9" default)))
- '(package-selected-packages (quote (company zenburn-theme)))
- '(tool-bar-mode nil))
+;; helm
+(require 'helm-config)
+(helm-mode 1)
 
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:family "Liberation Mono" :foundry "1ASC" :slant normal :weight normal :height 98 :width normal)))))
+;; zenburn-theme
+(defvar zenburn-override-colors-alist
+  '(("zenburn-bg" . "#111111")))
+(load-theme 'zenburn t)
+
+;; customize emacs
+(setq custom-file (locate-user-emacs-file "conf/custom.el"))
+(load custom-file t)
 
 (provide 'init)
 ;;; init.el ends here
