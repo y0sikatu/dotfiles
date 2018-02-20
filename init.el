@@ -22,8 +22,10 @@
 (defvar installing-package-list
   '(
 	company
+	company-irony
 	flycheck
 	helm
+	irony
 	yasnippet
 	zenburn-theme
 	))
@@ -56,20 +58,20 @@
 			 (setq-default indent-tabs-mode nil)
 			 (c-set-style "stroustrup")
 			 (c-set-offset 'innamespace 0)
-			 (set (make-local-variable 'company-backends)
-				  '((company-dabbrev-code company-yasnippet)))
 			 ))
 
 ;; company
 (require 'company)
-(global-company-mode) ; 全バッファで有効にする
+(global-company-mode 1) ; 全バッファで有効にする
 (setq company-idle-delay 0) ; デフォルトは0.5
 (setq company-minimum-prefix-length 2) ; デフォルトは4
 (setq company-selection-wrap-around t) ; 候補の一番下でさらに下に行こうとすると一番上に戻る
-(define-key company-active-map (kbd "M-n") nil)
-(define-key company-active-map (kbd "M-p") nil)
 (define-key company-active-map (kbd "C-n") 'company-select-next)
 (define-key company-active-map (kbd "C-p") 'company-select-previous)
+(define-key company-search-map (kbd "C-n") 'company-select-next)
+(define-key company-search-map (kbd "C-p") 'company-select-previous)
+(define-key company-active-map (kbd "M-n") nil)
+(define-key company-active-map (kbd "M-p") nil)
 (define-key company-active-map (kbd "C-h") nil)
 (defun company--insert-candidate2 (candidate)
   (when (> (length candidate) 0)
@@ -99,8 +101,16 @@
 (require 'helm-config)
 (helm-mode 1)
 
+;; irony
+(require 'irony)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony)
+
 ;; yasnippet
 (require 'yasnippet)
+;; companyと競合するのでyasnippetのfield移動は "C-i" のみにする
+(define-key yas-keymap (kbd "<tab>") nil)
 (yas-global-mode 1)
 
 ;; zenburn-theme
