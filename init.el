@@ -25,6 +25,7 @@
 	company-irony
 	flycheck
 	helm
+	helm-projectile
 	irony
 	rtags
 	yasnippet
@@ -117,6 +118,10 @@
 (define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
 (helm-autoresize-mode 1)
 (helm-mode 1)
+
+;; helm-projectile
+(require 'helm-projectile)
+(helm-projectile-on)
 
 ;; irony
 (require 'irony)
