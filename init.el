@@ -25,6 +25,7 @@
 	company-irony
 	flycheck
 	helm
+	helm-gtags
 	helm-projectile
 	irony
 	rtags
@@ -119,6 +120,24 @@
 (helm-autoresize-mode 1)
 (helm-mode 1)
 
+;; helm-gtags
+(custom-set-variables
+ ;;  '(helm-gtags-suggested-key-mapping t)
+ '(helm-gtags-ignore-case t)
+ '(helm-gtags-auto-update t)
+ )
+(require 'helm-gtags)
+(add-hook 'c-mode-common-hook 'helm-gtags-mode)
+(with-eval-after-load 'helm-gtags
+  (define-key helm-gtags-mode-map (kbd "C-c t") 'helm-gtags-dwim)
+  (define-key helm-gtags-mode-map (kbd "C-c r") 'helm-gtags-find-rtag)
+  (define-key helm-gtags-mode-map (kbd "C-c s") 'helm-gtags-find-symbol)
+  (define-key helm-gtags-mode-map (kbd "C-c p") 'helm-gtags-parse-file)
+  (define-key helm-gtags-mode-map (kbd "C-c >") 'helm-gtags-next-history)
+  (define-key helm-gtags-mode-map (kbd "C-c <") 'helm-gtags-previous-history)
+  (define-key helm-gtags-mode-map (kbd "M-,") 'helm-gtags-pop-stack)
+  )
+
 ;; helm-projectile
 (require 'helm-projectile)
 (helm-projectile-on)
@@ -131,15 +150,15 @@
 (add-to-list 'company-backends 'company-irony)
 
 ;; rtags
-(require 'rtags)
-(add-hook 'c-mode-common-hook
-		  '(lambda()
-			(when (rtags-is-indexed)
-			  (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
-			  (local-set-key (kbd "M-;") 'rtags-find-symbol)
-			  (local-set-key (kbd "M-@") 'rtags-find-references)
-			  (local-set-key (kbd "M-,") 'rtags-location-stack-back))))
-(custom-set-variables '(rtags-use-helm t))
+;; (require 'rtags)
+;; (add-hook 'c-mode-common-hook
+;; 		  '(lambda()
+;; 			(when (rtags-is-indexed)
+;; 			  (local-set-key (kbd "M-.") 'rtags-find-symbol-at-point)
+;; 			  (local-set-key (kbd "M-;") 'rtags-find-symbol)
+;; 			  (local-set-key (kbd "M-@") 'rtags-find-references)
+;; 			  (local-set-key (kbd "M-,") 'rtags-location-stack-back))))
+;; (custom-set-variables '(rtags-use-helm t))
 
 ;; yasnippet
 (require 'yasnippet)
