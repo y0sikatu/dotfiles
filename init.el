@@ -48,6 +48,7 @@
 ;; misc
 (setq-default transient-mark-mode t)
 (setq-default tab-width 4)
+(setq-default inhibit-startup-screen t)
 (setq make-backup-files nil)
 (global-linum-mode)
 (column-number-mode t)
