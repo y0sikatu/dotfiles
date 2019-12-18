@@ -10,4 +10,5 @@
 	fe = fetch --prune --tags
 	lg = log --decorate --graph
 	lgn = log --decorate --graph --name-status
+	lgn = log --decorate --graph --oneline
 
